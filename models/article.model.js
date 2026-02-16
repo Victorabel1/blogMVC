@@ -16,9 +16,10 @@ const articleSchema = new mongoose.Schema(
         maxlength: 2000
     },
     author: {
-        type: String, 
-        required: false,
-        default: 'Guest',}
+        type: mongoose.Schema.Types.ObjectId, 
+        required: true,
+        ref: 'User',
+    },
     },
     {timestamps: true} 
 ); //Article Created/Updated

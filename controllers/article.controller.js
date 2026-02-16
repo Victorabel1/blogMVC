@@ -15,7 +15,12 @@ const postArticle = async (req, res, next) => {
     }
 
     try {
-        const newArticle = new ArticleModel(value);
+        const newArticle = new ArticleModel({
+            title: req.body.title,
+            content: req.body.content,
+            author: req.user._id, // To set the author field to the ID of the currently authenticated user, which is available in req.user._id after the requireAuth middleware has processed the request.
+        }  );
+
         await newArticle.save();
         
         return res.status(201).json({
@@ -36,14 +41,15 @@ const getAllArticle = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     try {
-        const articles = await ArticleModel.find({})
-           .sort({createdAt: -1})
-           .limit(limit)
-           .skip(skip);
+        console.log(req.user);
+        const articles = await ArticleModel.find().populate(
+            'author', 
+            'name _id email'
+        ).sort({ createdAt: -1 }).limit(Number(limit)).skip(Number(skip));
 
         return res.status(200).json({
             message: "Articles fetched successfully",
-            data: articles
+            data: articles,
         })
     }catch (error) {
         console.error(error);
