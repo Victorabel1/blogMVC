@@ -43,7 +43,7 @@ PUT /api/articles/:id — update article
 DELETE /api/articles/:id — delete article
 Validation for articles lives in post.validation.js.
 
-Notes
+Notes:
 Passwords are hashed with bcrypt before saving.
 JWT is issued at login and expected by requireAuth.
 The API currently returns the user password in the login response (for learning only). Remove that in production
