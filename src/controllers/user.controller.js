@@ -2,20 +2,10 @@ const userModel = require('../models/user.model');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { hashPassword } = require('../utils/bcrypt');
 
 
-const registerUser = async (req, res, next) => {
-  const registerSchema = Joi.object({
-    name: Joi.string().min(3).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-  });
-
-    const { error } = registerSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    };
-    
+const registerUser = async (req, res, next) => { 
   try {
     const { name, email, password } = req.body;
     const existingUser = await userModel.findOne({ email });
@@ -39,13 +29,13 @@ const registerUser = async (req, res, next) => {
           email: User.email,
         }
      });
-    } catch (error) {
+  } catch (error) {
       next(error);
      };
 };
 
 const loginUser = async (req, res, next) => {
-  const loginSchema = Joi.object({
+   const loginSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
   });
@@ -55,7 +45,7 @@ const loginUser = async (req, res, next) => {
     return res.status(400).json({ error: error.details[0].message });
   };
 
-  const { email, password } = req.body;
+  const { email, password, name} = req.body;
 
   try {
     const user = await userModel.findOne({ email });
@@ -66,6 +56,8 @@ const loginUser = async (req, res, next) => {
     if (!isMatch) {
       throw new Error('Invalid credentials');
     }
+
+    await hashPassword(password);
 
     const token = jwt.sign(
         {UserId: user._id, name: user.name, email: user.email }, // payload
@@ -83,10 +75,9 @@ const loginUser = async (req, res, next) => {
       },
         token: token,
     });
-
-    } catch (error) {
+  } catch (error) {
       next(error);
-        };
+  }
 };
 
 module.exports = {

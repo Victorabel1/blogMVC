@@ -20,17 +20,19 @@ const requireAuth = require('../middlewares/requireAuth.js');
 
 const router = express.Router();
 
-router.post('/articles', validateArticle, requireAuth, postArticle);
+router.use(requireAuth); //layer of abstraction for authentication, all routes below this line will require authentication
 
-router.get('/articles', requireAuth, getAllArticle);
+router.post('/articles', validateArticle, postArticle);
 
-router.get('/articles/search', requireAuth, searchArticles);
+router.get('/articles', getAllArticle);
 
-router.get('/articles/:id', requireAuth, getArticleById);
+router.get('/articles/search', searchArticles);
 
-router.put('/articles/:id', validateUpdateArticle, requireAuth, updateArticleById);
+router.get('/articles/:id', getArticleById);
 
-router.delete('/articles/:id', requireAuth, deleteArticleById);
+router.put('/articles/:id', validateUpdateArticle, updateArticleById);
+
+router.delete('/articles/:id', deleteArticleById);
 
 
 module.exports = router;
