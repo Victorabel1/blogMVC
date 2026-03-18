@@ -1,4 +1,4 @@
-A simple Express + MongoDB REST API for user authentication and CRUD operations on articles.
+An Express + MongoDB REST API for user authentication and CRUD operations on articles.
 
 Features
 User signup + login (JWT based)
