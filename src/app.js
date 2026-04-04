@@ -14,9 +14,11 @@ app.use(cors('*'));
 
 app.use(RequestLogger);
 
+
+app.use('/api/users/', userRoutes);
+
 app.use('/api', ArticleRoutes);
 
-app.use('/api/auth/', userRoutes);
 
 app.use(errorHandler);
 
