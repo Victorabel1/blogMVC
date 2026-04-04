@@ -49,7 +49,7 @@ Validation
 
 File Upload
 - multer (^2.1.1) – Middleware for file uploads
-- cloudinary (^2.9.0) – Cloud storage for images
+- cloudinary (^1.41.3) – Cloud storage for images
 - multer-storage-cloudinary (^4.0.0) – Integration between multer and Cloudinary
 
 Utilities
